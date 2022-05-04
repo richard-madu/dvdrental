@@ -1,0 +1,19 @@
+--Now we need to know how the length of rental duration of these family-friendly movies compares to the duration that all movies are rented for.
+--Can you provide a table with the movie titles and divide them into 4 levels (first_quarter, second_quarter, third_quarter, and final_quarter) based on the quartiles (25%, 50%, 75%) of the rental duration for movies across all categories
+--You should only need the category, film_category, and film tables to perform this task
+--Make sure to also indicate the category that these family-friendly movies fall into
+SELECT
+  f.title film_title,
+  c.name cname,
+  f.rental_duration,
+--use ntile window function to get the standart quartile
+  NTILE(4) OVER (ORDER BY f.rental_duration) AS standard_quartile
+FROM film f
+--JOIN film_category
+JOIN film_category fc
+  ON f.film_id = fc.film_id
+--JOIN category
+JOIN category c
+  ON c.category_id = fc.category_id
+--Fliter to include family movies only
+WHERE c.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
