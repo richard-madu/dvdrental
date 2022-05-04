@@ -1,0 +1,26 @@
+--We want to understand more about the movies that families are watching.
+-- The following categories are considered family movies: Animation, Children, Classics, Comedy, Family and Music.
+--This query, you will need 5 tables: Category, Film_Category, Inventory, Rental and Film. Your solution should have three columns: Film title, Category name and Count of Rentals
+
+SELECT
+  film.title,
+  category.name AS category_name,
+  COUNT(rental.rental_id)
+FROM film
+--JOIN film_category
+JOIN film_category
+  ON film.film_id = film_category.film_id
+--JOIN category
+JOIN category
+  ON category.category_id = film_category.category_id
+--JOIN inventory
+JOIN inventory
+  ON film.film_id = inventory.film_id
+--JOIN rental
+JOIN rental
+  ON inventory.inventory_id = rental.inventory_id
+--filter to include only family movies
+WHERE category.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+GROUP BY 1,
+         2
+ORDER BY 2, 1
