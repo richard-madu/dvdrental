@@ -1,0 +1,48 @@
+-- This is a query that returns the store ID for the store, the year and month and the number of rental orders each store has fulfilled for that month. 
+--Your table should include a column for each of the following: 
+--year, month, store ID and count of rental orders fulfilled during that month
+
+--create a temp table that queries the top 10 customers
+With top10 as (SELECT
+        c.customer_id, c.first_name||' '||c.last_name as full_name,
+        sum(p.amount) total
+    FROM
+        customer c
+        JOIN payment p ON c.customer_id = p.customer_id
+    GROUP BY
+        1,2
+    ORDER BY
+        3 DESC
+    LIMIT 10
+               
+),
+
+-- Create another temp table that queries the monthly payment of customers
+monthly_customer_payment_by_month AS 
+(
+SELECT
+  c.customer_id,
+  date_trunc('month', p.payment_date) payment_month,
+  SUM(p.amount) monthly_total,
+  COUNT(payment_id) payment_count
+FROM customer c
+JOIN payment p
+  ON c.customer_id = p.customer_id
+WHERE date_part('year', p.payment_date) = 2007
+GROUP BY 1,
+         2
+ORDER BY 1,
+2
+)
+-- Join the two temp tables
+SELECT
+  full_name,
+  payment_month,
+  monthly_total,
+  payment_count
+FROM monthly_customer_payment_by_month
+JOIN top10
+  ON top10.customer_id = monthly_customer_payment_by_month.customer_id
+ORDER BY full_name
+
+
