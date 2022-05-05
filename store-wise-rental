@@ -1,0 +1,20 @@
+-- Write a query that returns the store ID for the store, the year and month and the number of rental orders each store has fulfilled for that month.
+-- Your table should include a column for each of the following: 
+--year, month, store ID and count of rental orders fulfilled during that month
+SELECT
+  store.store_id,
+  date_part('month', rental_date) AS month,
+  date_part('year', rental_date) AS year,
+  COUNT(rental_id) AS count
+FROM store
+--Join the staff table
+JOIN staff
+  ON staff.store_id= store.store_id
+--Join the rental
+JOIN rental
+  ON rental.staff_id = staff.staff_id
+-- add a group by statement because of the aggregation
+GROUP BY 1,
+         2,
+         3
+ORDER BY 3, 2
