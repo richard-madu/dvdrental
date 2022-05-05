@@ -1,7 +1,4 @@
--- This is a query that returns the store ID for the store, the year and month and the number of rental orders each store has fulfilled for that month. 
---Your table should include a column for each of the following: 
---year, month, store ID and count of rental orders fulfilled during that month
-
+--We would like to know who were our top 10 paying customers, how many payments they made on a monthly basis during 2007, and what was the amount of the monthly payments
 --create a temp table that queries the top 10 customers
 With top10 as (SELECT
         c.customer_id, c.first_name||' '||c.last_name as full_name,
